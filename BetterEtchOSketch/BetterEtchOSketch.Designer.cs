@@ -54,6 +54,8 @@
             DrawWaveformStripMenuItem = new ToolStripMenuItem();
             ClearStripMenuItem = new ToolStripMenuItem();
             AboutStripMenuItem = new ToolStripMenuItem();
+            MouseRadioButton = new RadioButton();
+            ExternalRadioButton = new RadioButton();
             ((System.ComponentModel.ISupportInitialize)DisplayPictureBox).BeginInit();
             DisplayContextMenuStrip.SuspendLayout();
             DisplayMainMenuStrip.SuspendLayout();
@@ -108,7 +110,7 @@
             DisplayContextMenuStrip.ImageScalingSize = new Size(20, 20);
             DisplayContextMenuStrip.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem1, editToolStripMenuItem1, HelpStripMenuItem });
             DisplayContextMenuStrip.Name = "DisplayContextMenuStrip";
-            DisplayContextMenuStrip.Size = new Size(211, 104);
+            DisplayContextMenuStrip.Size = new Size(111, 76);
             // 
             // DisplayMainMenuStrip
             // 
@@ -175,21 +177,21 @@
             // 
             fileToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { ExitStripMenuItem });
             fileToolStripMenuItem1.Name = "fileToolStripMenuItem1";
-            fileToolStripMenuItem1.Size = new Size(210, 24);
+            fileToolStripMenuItem1.Size = new Size(110, 24);
             fileToolStripMenuItem1.Text = "File";
             // 
             // editToolStripMenuItem1
             // 
             editToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { SelectColorStripMenuItem, DrawWaveformStripMenuItem, ClearStripMenuItem });
             editToolStripMenuItem1.Name = "editToolStripMenuItem1";
-            editToolStripMenuItem1.Size = new Size(210, 24);
+            editToolStripMenuItem1.Size = new Size(110, 24);
             editToolStripMenuItem1.Text = "Edit";
             // 
             // HelpStripMenuItem
             // 
             HelpStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { AboutStripMenuItem });
             HelpStripMenuItem.Name = "HelpStripMenuItem";
-            HelpStripMenuItem.Size = new Size(210, 24);
+            HelpStripMenuItem.Size = new Size(110, 24);
             HelpStripMenuItem.Text = "Help";
             // 
             // ExitStripMenuItem
@@ -222,11 +224,35 @@
             AboutStripMenuItem.Size = new Size(224, 26);
             AboutStripMenuItem.Text = "About";
             // 
+            // MouseRadioButton
+            // 
+            MouseRadioButton.AutoSize = true;
+            MouseRadioButton.Location = new Point(202, 397);
+            MouseRadioButton.Name = "MouseRadioButton";
+            MouseRadioButton.Size = new Size(117, 24);
+            MouseRadioButton.TabIndex = 8;
+            MouseRadioButton.TabStop = true;
+            MouseRadioButton.Text = "radioButton1";
+            MouseRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // ExternalRadioButton
+            // 
+            ExternalRadioButton.AutoSize = true;
+            ExternalRadioButton.Location = new Point(79, 397);
+            ExternalRadioButton.Name = "ExternalRadioButton";
+            ExternalRadioButton.Size = new Size(117, 24);
+            ExternalRadioButton.TabIndex = 9;
+            ExternalRadioButton.TabStop = true;
+            ExternalRadioButton.Text = "radioButton2";
+            ExternalRadioButton.UseVisualStyleBackColor = true;
+            // 
             // BetterEtchOSketch
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(ExternalRadioButton);
+            Controls.Add(MouseRadioButton);
             Controls.Add(DisplayMainMenuStrip);
             Controls.Add(ClearButton);
             Controls.Add(DrawWaveformButton);
@@ -271,5 +297,7 @@
         private ToolStripMenuItem ClearStripMenuItem;
         private ToolStripMenuItem HelpStripMenuItem;
         private ToolStripMenuItem AboutStripMenuItem;
+        private RadioButton MouseRadioButton;
+        private RadioButton ExternalRadioButton;
     }
 }
