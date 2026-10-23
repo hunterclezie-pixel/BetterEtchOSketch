@@ -167,6 +167,24 @@ namespace BetterEtchOSketch
             this.Location = new Point(originalX, originalY); // Return to original position after shaking
         }
 
+        void DrawFromPIC()
+        {
+            if (!ExternalRadioButton.Checked || adcX < 0 || adcY < 0)
+                return;
+
+            int newX = adcX * (DisplayPictureBox.Width - 1) / 1023;
+            int newY = adcY * (DisplayPictureBox.Height - 1) / 1023;
+
+            if (picPointReady)
+            {
+                DrawLineSegment(newX, newY);
+            }
+
+            oldX = newX;
+            oldY = newY;
+            picPointReady = true;
+        }
+
         // Handles mouse movement and clicks on the picture box for drawing and showing the context menu
         private void DisplayPictureBox_MouseStuff(object? sender, MouseEventArgs e)
         {

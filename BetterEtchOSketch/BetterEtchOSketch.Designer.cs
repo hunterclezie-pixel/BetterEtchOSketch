@@ -227,12 +227,12 @@
             // MouseRadioButton
             // 
             MouseRadioButton.AutoSize = true;
-            MouseRadioButton.Location = new Point(202, 397);
+            MouseRadioButton.Location = new Point(212, 397);
             MouseRadioButton.Name = "MouseRadioButton";
-            MouseRadioButton.Size = new Size(117, 24);
+            MouseRadioButton.Size = new Size(118, 24);
             MouseRadioButton.TabIndex = 8;
             MouseRadioButton.TabStop = true;
-            MouseRadioButton.Text = "radioButton1";
+            MouseRadioButton.Text = "Mouse Select";
             MouseRadioButton.UseVisualStyleBackColor = true;
             // 
             // ExternalRadioButton
@@ -240,10 +240,10 @@
             ExternalRadioButton.AutoSize = true;
             ExternalRadioButton.Location = new Point(79, 397);
             ExternalRadioButton.Name = "ExternalRadioButton";
-            ExternalRadioButton.Size = new Size(117, 24);
+            ExternalRadioButton.Size = new Size(127, 24);
             ExternalRadioButton.TabIndex = 9;
             ExternalRadioButton.TabStop = true;
-            ExternalRadioButton.Text = "radioButton2";
+            ExternalRadioButton.Text = "External Select";
             ExternalRadioButton.UseVisualStyleBackColor = true;
             // 
             // BetterEtchOSketch
