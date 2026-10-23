@@ -29,6 +29,20 @@ namespace BetterEtchOSketch
         private Color backColor = Color.White;
         private int penSize = 1;
 
+        // New serial and potentiometer variables
+        SerialPort _serialPort = new SerialPort();
+        System.Windows.Forms.Timer AnalogTimer = new System.Windows.Forms.Timer();
+        ToolTip tips = new ToolTip();
+
+        int adcX = -1, adcY = -1;
+        bool picPointReady = false;
+        bool analogBusy = false;
+        int nextChannel = 0;
+        int analogFailures = 0;
+
+        // AN1 is confirmed; AN0 must be verified
+        const byte AN0Command = 0x50;
+
         //Custom Methids below here --------------------------------------------------------------
 
         // Draws a line segment from the last position to the new position
