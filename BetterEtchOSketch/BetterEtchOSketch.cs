@@ -188,24 +188,16 @@ namespace BetterEtchOSketch
         // Handles mouse movement and clicks on the picture box for drawing and showing the context menu
         private void DisplayPictureBox_MouseStuff(object? sender, MouseEventArgs e)
         {
-            switch (e.Button)
+            if (!MouseRadioButton.Checked)
+                return;
+
+            if (e.Button == MouseButtons.Left)
             {
-                case MouseButtons.Left:
-                    DrawLineSegment(e.X, e.Y);
-                    break;
-                case MouseButtons.Right:
-                    DisplayContextMenuStrip.Show(DisplayPictureBox, e.Location);
-                    break;
-                case MouseButtons.Middle:
-                    UpdateBackgroundColor();
-                    break;
-                default:
-                    break;
+                DrawLineSegment(e.X, e.Y);
             }
 
-            //Update last position on every move
-            this.oldX = e.X;
-            this.oldY = e.Y;
+            oldX = e.X;
+            oldY = e.Y;
             this.Text = $"{e.X},{e.Y}";
         }
 

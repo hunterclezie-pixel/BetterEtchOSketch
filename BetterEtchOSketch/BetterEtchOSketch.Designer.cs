@@ -35,25 +35,25 @@
             DrawWaveformButton = new Button();
             ClearButton = new Button();
             DisplayContextMenuStrip = new ContextMenuStrip(components);
+            fileToolStripMenuItem1 = new ToolStripMenuItem();
+            ExitStripMenuItem = new ToolStripMenuItem();
+            editToolStripMenuItem1 = new ToolStripMenuItem();
+            SelectColorStripMenuItem = new ToolStripMenuItem();
+            DrawWaveformStripMenuItem = new ToolStripMenuItem();
+            ClearStripMenuItem = new ToolStripMenuItem();
+            HelpStripMenuItem = new ToolStripMenuItem();
+            AboutStripMenuItem = new ToolStripMenuItem();
             PenColorDialog = new ColorDialog();
             DisplayToolTip = new ToolTip(components);
             DisplayMainMenuStrip = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
-            editToolStripMenuItem = new ToolStripMenuItem();
-            helpToolStripMenuItem = new ToolStripMenuItem();
             ExitMainStripItem = new ToolStripMenuItem();
+            editToolStripMenuItem = new ToolStripMenuItem();
             SelectColorMainStripItem = new ToolStripMenuItem();
             DrawWaveformMainStripItem = new ToolStripMenuItem();
             ClearMainStripItem = new ToolStripMenuItem();
+            helpToolStripMenuItem = new ToolStripMenuItem();
             AboutMainStripItem = new ToolStripMenuItem();
-            fileToolStripMenuItem1 = new ToolStripMenuItem();
-            editToolStripMenuItem1 = new ToolStripMenuItem();
-            HelpStripMenuItem = new ToolStripMenuItem();
-            ExitStripMenuItem = new ToolStripMenuItem();
-            SelectColorStripMenuItem = new ToolStripMenuItem();
-            DrawWaveformStripMenuItem = new ToolStripMenuItem();
-            ClearStripMenuItem = new ToolStripMenuItem();
-            AboutStripMenuItem = new ToolStripMenuItem();
             MouseRadioButton = new RadioButton();
             ExternalRadioButton = new RadioButton();
             ((System.ComponentModel.ISupportInitialize)DisplayPictureBox).BeginInit();
@@ -112,6 +112,57 @@
             DisplayContextMenuStrip.Name = "DisplayContextMenuStrip";
             DisplayContextMenuStrip.Size = new Size(111, 76);
             // 
+            // fileToolStripMenuItem1
+            // 
+            fileToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { ExitStripMenuItem });
+            fileToolStripMenuItem1.Name = "fileToolStripMenuItem1";
+            fileToolStripMenuItem1.Size = new Size(110, 24);
+            fileToolStripMenuItem1.Text = "File";
+            // 
+            // ExitStripMenuItem
+            // 
+            ExitStripMenuItem.Name = "ExitStripMenuItem";
+            ExitStripMenuItem.Size = new Size(116, 26);
+            ExitStripMenuItem.Text = "Exit";
+            // 
+            // editToolStripMenuItem1
+            // 
+            editToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { SelectColorStripMenuItem, DrawWaveformStripMenuItem, ClearStripMenuItem });
+            editToolStripMenuItem1.Name = "editToolStripMenuItem1";
+            editToolStripMenuItem1.Size = new Size(110, 24);
+            editToolStripMenuItem1.Text = "Edit";
+            // 
+            // SelectColorStripMenuItem
+            // 
+            SelectColorStripMenuItem.Name = "SelectColorStripMenuItem";
+            SelectColorStripMenuItem.Size = new Size(199, 26);
+            SelectColorStripMenuItem.Text = "Select Color";
+            // 
+            // DrawWaveformStripMenuItem
+            // 
+            DrawWaveformStripMenuItem.Name = "DrawWaveformStripMenuItem";
+            DrawWaveformStripMenuItem.Size = new Size(199, 26);
+            DrawWaveformStripMenuItem.Text = "Draw Waveform";
+            // 
+            // ClearStripMenuItem
+            // 
+            ClearStripMenuItem.Name = "ClearStripMenuItem";
+            ClearStripMenuItem.Size = new Size(199, 26);
+            ClearStripMenuItem.Text = "Clear";
+            // 
+            // HelpStripMenuItem
+            // 
+            HelpStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { AboutStripMenuItem });
+            HelpStripMenuItem.Name = "HelpStripMenuItem";
+            HelpStripMenuItem.Size = new Size(110, 24);
+            HelpStripMenuItem.Text = "Help";
+            // 
+            // AboutStripMenuItem
+            // 
+            AboutStripMenuItem.Name = "AboutStripMenuItem";
+            AboutStripMenuItem.Size = new Size(133, 26);
+            AboutStripMenuItem.Text = "About";
+            // 
             // DisplayMainMenuStrip
             // 
             DisplayMainMenuStrip.ImageScalingSize = new Size(20, 20);
@@ -129,25 +180,18 @@
             fileToolStripMenuItem.Size = new Size(46, 24);
             fileToolStripMenuItem.Text = "File";
             // 
+            // ExitMainStripItem
+            // 
+            ExitMainStripItem.Name = "ExitMainStripItem";
+            ExitMainStripItem.Size = new Size(116, 26);
+            ExitMainStripItem.Text = "Exit";
+            // 
             // editToolStripMenuItem
             // 
             editToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { SelectColorMainStripItem, DrawWaveformMainStripItem, ClearMainStripItem });
             editToolStripMenuItem.Name = "editToolStripMenuItem";
             editToolStripMenuItem.Size = new Size(49, 24);
             editToolStripMenuItem.Text = "Edit";
-            // 
-            // helpToolStripMenuItem
-            // 
-            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { AboutMainStripItem });
-            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            helpToolStripMenuItem.Size = new Size(55, 24);
-            helpToolStripMenuItem.Text = "Help";
-            // 
-            // ExitMainStripItem
-            // 
-            ExitMainStripItem.Name = "ExitMainStripItem";
-            ExitMainStripItem.Size = new Size(224, 26);
-            ExitMainStripItem.Text = "Exit";
             // 
             // SelectColorMainStripItem
             // 
@@ -167,67 +211,23 @@
             ClearMainStripItem.Size = new Size(199, 26);
             ClearMainStripItem.Text = "Clear";
             // 
+            // helpToolStripMenuItem
+            // 
+            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { AboutMainStripItem });
+            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            helpToolStripMenuItem.Size = new Size(55, 24);
+            helpToolStripMenuItem.Text = "Help";
+            // 
             // AboutMainStripItem
             // 
             AboutMainStripItem.Name = "AboutMainStripItem";
-            AboutMainStripItem.Size = new Size(224, 26);
+            AboutMainStripItem.Size = new Size(133, 26);
             AboutMainStripItem.Text = "About";
-            // 
-            // fileToolStripMenuItem1
-            // 
-            fileToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { ExitStripMenuItem });
-            fileToolStripMenuItem1.Name = "fileToolStripMenuItem1";
-            fileToolStripMenuItem1.Size = new Size(110, 24);
-            fileToolStripMenuItem1.Text = "File";
-            // 
-            // editToolStripMenuItem1
-            // 
-            editToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { SelectColorStripMenuItem, DrawWaveformStripMenuItem, ClearStripMenuItem });
-            editToolStripMenuItem1.Name = "editToolStripMenuItem1";
-            editToolStripMenuItem1.Size = new Size(110, 24);
-            editToolStripMenuItem1.Text = "Edit";
-            // 
-            // HelpStripMenuItem
-            // 
-            HelpStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { AboutStripMenuItem });
-            HelpStripMenuItem.Name = "HelpStripMenuItem";
-            HelpStripMenuItem.Size = new Size(110, 24);
-            HelpStripMenuItem.Text = "Help";
-            // 
-            // ExitStripMenuItem
-            // 
-            ExitStripMenuItem.Name = "ExitStripMenuItem";
-            ExitStripMenuItem.Size = new Size(224, 26);
-            ExitStripMenuItem.Text = "Exit";
-            // 
-            // SelectColorStripMenuItem
-            // 
-            SelectColorStripMenuItem.Name = "SelectColorStripMenuItem";
-            SelectColorStripMenuItem.Size = new Size(224, 26);
-            SelectColorStripMenuItem.Text = "Select Color";
-            // 
-            // DrawWaveformStripMenuItem
-            // 
-            DrawWaveformStripMenuItem.Name = "DrawWaveformStripMenuItem";
-            DrawWaveformStripMenuItem.Size = new Size(224, 26);
-            DrawWaveformStripMenuItem.Text = "Draw Waveform";
-            // 
-            // ClearStripMenuItem
-            // 
-            ClearStripMenuItem.Name = "ClearStripMenuItem";
-            ClearStripMenuItem.Size = new Size(224, 26);
-            ClearStripMenuItem.Text = "Clear";
-            // 
-            // AboutStripMenuItem
-            // 
-            AboutStripMenuItem.Name = "AboutStripMenuItem";
-            AboutStripMenuItem.Size = new Size(224, 26);
-            AboutStripMenuItem.Text = "About";
             // 
             // MouseRadioButton
             // 
             MouseRadioButton.AutoSize = true;
-            MouseRadioButton.Location = new Point(212, 397);
+            MouseRadioButton.Location = new Point(245, 410);
             MouseRadioButton.Name = "MouseRadioButton";
             MouseRadioButton.Size = new Size(118, 24);
             MouseRadioButton.TabIndex = 8;
@@ -238,7 +238,7 @@
             // ExternalRadioButton
             // 
             ExternalRadioButton.AutoSize = true;
-            ExternalRadioButton.Location = new Point(79, 397);
+            ExternalRadioButton.Location = new Point(245, 380);
             ExternalRadioButton.Name = "ExternalRadioButton";
             ExternalRadioButton.Size = new Size(127, 24);
             ExternalRadioButton.TabIndex = 9;
