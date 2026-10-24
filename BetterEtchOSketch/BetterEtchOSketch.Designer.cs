@@ -57,6 +57,7 @@
             MouseRadioButton = new RadioButton();
             ExternalRadioButton = new RadioButton();
             PortsComboBox = new ComboBox();
+            PICTimer = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)DisplayPictureBox).BeginInit();
             DisplayContextMenuStrip.SuspendLayout();
             DisplayMainMenuStrip.SuspendLayout();
@@ -255,6 +256,11 @@
             PortsComboBox.Size = new Size(190, 28);
             PortsComboBox.TabIndex = 10;
             // 
+            // PICTimer
+            // 
+            PICTimer.Interval = 50;
+            PICTimer.Tick += PICTimer_Tick;
+            // 
             // BetterEtchOSketch
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -310,5 +316,6 @@
         private RadioButton MouseRadioButton;
         private RadioButton ExternalRadioButton;
         private ComboBox PortsComboBox;
+        private System.Windows.Forms.Timer PICTimer;
     }
 }

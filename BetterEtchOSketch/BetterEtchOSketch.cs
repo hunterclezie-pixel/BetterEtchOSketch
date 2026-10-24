@@ -48,7 +48,98 @@ namespace BetterEtchOSketch
 
         // Serial and analog methods below here --------------------------------------------------------------
 
-        
+        async void SearchForPIC()
+        {
+            if (picScanning || picClosing || !ExternalRadioButton.Checked) return;
+            picScanning = true;
+            SerialPort? found = null;
+            try
+            {
+                found = await Task.Run(FindPIC);
+                if (picClosing || IsDisposed || !ExternalRadioButton.Checked)
+                {
+                    found?.Dispose();
+                    return;
+                }
+                if (found == null)
+                {
+                    this.Text = "PIC not found - check USB and firmware";
+                    nextPICScan = DateTime.Now.AddSeconds(2);
+                }
+                else
+                {
+                    picPort = found;
+                    picWaiting = false;
+                    requestedChannel = -1;
+                    nextChannel = 0;
+                    receivedBytes.Clear();
+                    this.Text = "PIC verified: " + found.PortName;
+                }
+            }
+            catch (Exception ex)
+            {
+                found?.Dispose();
+                this.Text = "PIC connection error: " + ex.Message;
+                nextPICScan = DateTime.Now.AddSeconds(2);
+            }
+            finally { picScanning = false; }
+        }
+
+        // Check exact device ID before sending ADC requests
+        SerialPort? FindPIC()
+        {
+            string[] ports;
+            try { ports = SerialPort.GetPortNames(); }
+            catch (Exception) { return null; }
+
+            foreach (string name in ports)
+            {
+                if (picClosing) return null;
+                SerialPort candidate = new SerialPort(name, 9600, Parity.None, 8, StopBits.One);
+                bool accepted = false;
+                try
+                {
+                    candidate.ReadTimeout = 50;
+                    candidate.WriteTimeout = 500;
+                    candidate.Open();
+                    System.Threading.Thread.Sleep(100);
+                    for (int attempt = 0; attempt < 2 && !accepted && !picClosing; attempt++)
+                    {
+                        candidate.DiscardInBuffer();
+                        candidate.Write(IdRequest, 0, IdRequest.Length);
+                        List<byte> reply = new List<byte>();
+                        DateTime stop = DateTime.UtcNow.AddMilliseconds(500);
+                        while (DateTime.UtcNow < stop && reply.Count < 5 && !picClosing)
+                        {
+                            try { reply.Add((byte)candidate.ReadByte()); }
+                            catch (TimeoutException) { }
+                        }
+                        if (reply.Count == 5)
+                        {
+                            System.Threading.Thread.Sleep(50);
+                            while (candidate.BytesToRead > 0 && reply.Count < 11)
+                                reply.Add((byte)candidate.ReadByte());
+                        }
+                        accepted = reply.Count == IdReply.Length &&
+                            reply.ToArray().AsSpan().SequenceEqual(IdReply);
+                    }
+                    if (accepted && !picClosing) return candidate;
+                }
+                catch (Exception) { }
+                candidate.Dispose();
+            }
+            return null;
+        }
+
+        void RequestADC()
+        {
+            if (picPort == null || !picPort.IsOpen || picWaiting) return;
+            byte[] request = nextChannel == 0 ? AN0Request : AN1Request;
+            requestedChannel = nextChannel;
+            picPort.Write(request, 0, request.Length);
+            picWaiting = true;
+            picRequestTime = DateTime.Now;
+        }
 
         //Custom Methids below here --------------------------------------------------------------
 
@@ -270,6 +361,38 @@ namespace BetterEtchOSketch
             MessageBox.Show("This is an EtchOSketch application, with basic drawing functionalities. \n" +
                 "You can draw lines, select colors, and clear the screen. \n" +
                 "This also allows a Sine, Cosine, and Tangent waves are drawn in different colors.");
+        }
+
+        // Timer receives partial packets and alternates AN0 and AN1 requests
+        private void PicTimer_Tick(object? sender, EventArgs e)
+        {
+            if (!ExternalRadioButton.Checked || picClosing) return;
+            if (picPort == null || !picPort.IsOpen)
+            {
+                if (!picScanning && DateTime.Now >= nextPICScan) SearchForPIC();
+                return;
+            }
+            try
+            {
+                while (picPort.BytesToRead > 0)
+                    ReceiveByte((byte)picPort.ReadByte());
+
+                if (picWaiting && (DateTime.Now - picRequestTime).TotalMilliseconds > 500)
+                {
+                    adcFailures++;
+                    ClosePIC();
+                    this.Text = "PIC ADC timeout - check AN1 firmware support";
+                    nextPICScan = DateTime.Now.AddSeconds(2);
+                    return;
+                }
+                if (!picWaiting) RequestADC();
+            }
+            catch (Exception)
+            {
+                ClosePIC();
+                this.Text = "PIC disconnected - reconnecting";
+                nextPICScan = DateTime.Now.AddSeconds(2);
+            }
         }
     }
 }
