@@ -226,7 +226,7 @@ namespace BetterEtchOSketch
             ClosePIC();
         }
 
-        //Custom Methids below here --------------------------------------------------------------
+        // Drawing methods below here --------------------------------------------------------------
 
         // Draws a line segment from the last position to the new position
         void DrawLineSegment(int newX, int newY)
@@ -453,8 +453,8 @@ namespace BetterEtchOSketch
 
         //Event Handlers below here --------------------------------------------------------------
 
-        // Timer receives partial packets and alternates AN0 and AN1 requests
         private void PicTimer_Tick(object? sender, EventArgs e)
+        // Timer receives partial packets and alternates AN0 and AN1 requests
         {
             if (!ExternalRadioButton.Checked || picClosing) return;
             if (picPort == null || !picPort.IsOpen)
