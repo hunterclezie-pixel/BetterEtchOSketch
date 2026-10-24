@@ -8,6 +8,7 @@ namespace BetterEtchOSketch
             InitializeComponent();
             DisplayPictureBox.MouseMove += DisplayPictureBox_MouseStuff;
             DisplayPictureBox.MouseDown += DisplayPictureBox_MouseStuff;
+            MouseRadioButton.Enabled = true;
 
             // Event handlers for Context Menu items
             ExitStripMenuItem.Click += ExitButton_Click;
@@ -26,6 +27,20 @@ namespace BetterEtchOSketch
             MouseRadioButton.Checked = true;
             MouseRadioButton.CheckedChanged += DrawingModeChanged;
             ExternalRadioButton.CheckedChanged += DrawingModeChanged;
+
+            // Tooltips
+            tips.SetToolTip(DisplayPictureBox, "Hold the left mouse button to draw; middle-click to select a color.");
+            tips.SetToolTip(SelectColorButton, "Choose a pen color.");
+            tips.SetToolTip(DrawWaveformButton, "Draw a grid, sine, cosine, and tangent waves.");
+            tips.SetToolTip(ClearButton, "Shake and clear the drawing.");
+            tips.SetToolTip(ExitButton, "Close Etch-O-Sketch.");
+            tips.SetToolTip(MouseRadioButton, "Draw using the mouse.");
+            tips.SetToolTip(ExternalRadioButton, "Draw using two PIC potentiometers.");
+
+            // PIC timer (automatic device identification)
+            picTimer.Interval = 50;
+            picTimer.Tick += PicTimer_Tick;
+            picTimer.Start();
         }
 
         //Global Variables below here --------------------------------------------------------------

@@ -65,6 +65,7 @@
             // 
             // DisplayPictureBox
             // 
+            DisplayPictureBox.BackColor = Color.White;
             DisplayPictureBox.Location = new Point(12, 32);
             DisplayPictureBox.Name = "DisplayPictureBox";
             DisplayPictureBox.Size = new Size(776, 342);
@@ -76,7 +77,7 @@
             ExitButton.Location = new Point(694, 380);
             ExitButton.Name = "ExitButton";
             ExitButton.Size = new Size(94, 58);
-            ExitButton.TabIndex = 1;
+            ExitButton.TabIndex = 6;
             ExitButton.Text = "Exit";
             ExitButton.UseVisualStyleBackColor = true;
             ExitButton.Click += ExitButton_Click;
@@ -86,7 +87,7 @@
             SelectColorButton.Location = new Point(394, 380);
             SelectColorButton.Name = "SelectColorButton";
             SelectColorButton.Size = new Size(94, 58);
-            SelectColorButton.TabIndex = 2;
+            SelectColorButton.TabIndex = 3;
             SelectColorButton.Text = "Select Color";
             SelectColorButton.UseVisualStyleBackColor = true;
             SelectColorButton.Click += SelectColorButton_Click;
@@ -96,7 +97,7 @@
             DrawWaveformButton.Location = new Point(494, 380);
             DrawWaveformButton.Name = "DrawWaveformButton";
             DrawWaveformButton.Size = new Size(94, 58);
-            DrawWaveformButton.TabIndex = 3;
+            DrawWaveformButton.TabIndex = 4;
             DrawWaveformButton.Text = "Draw Waveform";
             DrawWaveformButton.UseVisualStyleBackColor = true;
             DrawWaveformButton.Click += DrawWavefomButton_Click;
@@ -106,7 +107,7 @@
             ClearButton.Location = new Point(594, 380);
             ClearButton.Name = "ClearButton";
             ClearButton.Size = new Size(94, 58);
-            ClearButton.TabIndex = 4;
+            ClearButton.TabIndex = 5;
             ClearButton.Text = "Clear";
             ClearButton.UseVisualStyleBackColor = true;
             ClearButton.Click += ClearButton_Click;
@@ -189,7 +190,7 @@
             // ExitMainStripItem
             // 
             ExitMainStripItem.Name = "ExitMainStripItem";
-            ExitMainStripItem.Size = new Size(116, 26);
+            ExitMainStripItem.Size = new Size(224, 26);
             ExitMainStripItem.Text = "Exit";
             // 
             // editToolStripMenuItem
@@ -227,7 +228,7 @@
             // AboutMainStripItem
             // 
             AboutMainStripItem.Name = "AboutMainStripItem";
-            AboutMainStripItem.Size = new Size(224, 26);
+            AboutMainStripItem.Size = new Size(133, 26);
             AboutMainStripItem.Text = "About";
             AboutMainStripItem.Click += AboutMainStripItem_Click;
             // 
@@ -237,7 +238,7 @@
             MouseRadioButton.Location = new Point(234, 414);
             MouseRadioButton.Name = "MouseRadioButton";
             MouseRadioButton.Size = new Size(118, 24);
-            MouseRadioButton.TabIndex = 8;
+            MouseRadioButton.TabIndex = 1;
             MouseRadioButton.TabStop = true;
             MouseRadioButton.Text = "Mouse Select";
             MouseRadioButton.UseVisualStyleBackColor = true;
@@ -248,7 +249,7 @@
             ExternalRadioButton.Location = new Point(234, 384);
             ExternalRadioButton.Name = "ExternalRadioButton";
             ExternalRadioButton.Size = new Size(127, 24);
-            ExternalRadioButton.TabIndex = 9;
+            ExternalRadioButton.TabIndex = 2;
             ExternalRadioButton.TabStop = true;
             ExternalRadioButton.Text = "External Select";
             ExternalRadioButton.UseVisualStyleBackColor = true;
