@@ -364,6 +364,7 @@ namespace BetterEtchOSketch
             this.Location = new Point(originalX, originalY); // Return to original position after shaking
         }
 
+        // Draws a line segment based on the ADC values received from the PIC
         void DrawFromPIC()
         {
             if (!ExternalRadioButton.Checked || adcX < 0 || adcY < 0)
@@ -382,8 +383,23 @@ namespace BetterEtchOSketch
             picPointReady = true;
         }
 
-        // Handles mouse movement and clicks on the picture box for drawing and showing the context menu
+        // Handles mouse movement on the picture box for drawing
         private void DisplayPictureBox_MouseStuff(object? sender, MouseEventArgs e)
+        {
+            if (!MouseRadioButton.Checked) return;
+
+            if (e.Button == MouseButtons.Left)
+            {
+                DrawLineSegment(e.X, e.Y);
+            }
+
+            oldX = e.X;
+            oldY = e.Y;
+            this.Text = $"{e.X},{e.Y}";
+        }
+
+        // Handles mouse clicks for the context menu, pen color, and starting position
+        private void DisplayPictureBox_MouseDown(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
