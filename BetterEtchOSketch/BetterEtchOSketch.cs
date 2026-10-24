@@ -1,3 +1,4 @@
+using System.IO.Ports;
 namespace BetterEtchOSketch
 {
     public partial class BetterEtchOSketch : Form
@@ -29,7 +30,7 @@ namespace BetterEtchOSketch
         private Color backColor = Color.White;
         private int penSize = 1;
 
-        // New serial and potentiometer variables
+        // Serial and potentiometer variables below Here --------------------------------------------------------------
         SerialPort _serialPort = new SerialPort();
         System.Windows.Forms.Timer AnalogTimer = new System.Windows.Forms.Timer();
         ToolTip tips = new ToolTip();
@@ -40,8 +41,14 @@ namespace BetterEtchOSketch
         int nextChannel = 0;
         int analogFailures = 0;
 
-        // AN1 is confirmed; AN0 must be verified
-        const byte AN0Command = 0x50;
+        static readonly byte[] IdRequest = { 0x24, 0x49, 0x00 };
+        static readonly byte[] IdReply = { 0x24, 0x49, 0x02, 0x33, 0x75 };
+        static readonly byte[] AN0Request = { 0x24, 0x41, 0x01, 0x00 };
+        static readonly byte[] AN1Request = { 0x24, 0x41, 0x01, 0x01 };
+
+        // Serial and analog methods below here --------------------------------------------------------------
+
+        
 
         //Custom Methids below here --------------------------------------------------------------
 
