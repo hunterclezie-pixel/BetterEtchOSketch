@@ -21,6 +21,11 @@ namespace BetterEtchOSketch
             DrawWaveformMainStripItem.Click += DrawWavefomButton_Click;
             SelectColorMainStripItem.Click += SelectColorButton_Click;
             AboutMainStripItem.Click += AboutStripMenuItem_Click;
+
+            // New drawing modes
+            MouseRadioButton.Checked = true;
+            MouseRadioButton.CheckedChanged += DrawingModeChanged;
+            ExternalRadioButton.CheckedChanged += DrawingModeChanged;
         }
 
         //Global Variables below here --------------------------------------------------------------
@@ -50,6 +55,7 @@ namespace BetterEtchOSketch
 
         // Serial and analog methods below here --------------------------------------------------------------
 
+        // Search for the PIC device on available serial ports and establish a connection
         async void SearchForPIC()
         {
             if (picScanning || picClosing || !ExternalRadioButton.Checked) return;
@@ -169,6 +175,7 @@ namespace BetterEtchOSketch
             if (requestedChannel == 1) DrawFromPIC();
         }
 
+        // Request the next ADC value from the PIC, alternating between AN0 and AN1 channels
         void RequestADC()
         {
             if (picPort == null || !picPort.IsOpen || picWaiting) return;
@@ -179,6 +186,7 @@ namespace BetterEtchOSketch
             picRequestTime = DateTime.Now;
         }
 
+        // Close the serial port and reset variables when the PIC is disconnected or an error occurs
         void ClosePIC()
         {
             try { picPort?.Close(); picPort?.Dispose(); } catch (Exception) { }
