@@ -56,6 +56,8 @@
             AboutMainStripItem = new ToolStripMenuItem();
             MouseRadioButton = new RadioButton();
             ExternalRadioButton = new RadioButton();
+            PortsComboBox = new ComboBox();
+            ConnectButton = new Button();
             ((System.ComponentModel.ISupportInitialize)DisplayPictureBox).BeginInit();
             DisplayContextMenuStrip.SuspendLayout();
             DisplayMainMenuStrip.SuspendLayout();
@@ -227,7 +229,7 @@
             // MouseRadioButton
             // 
             MouseRadioButton.AutoSize = true;
-            MouseRadioButton.Location = new Point(245, 410);
+            MouseRadioButton.Location = new Point(234, 414);
             MouseRadioButton.Name = "MouseRadioButton";
             MouseRadioButton.Size = new Size(118, 24);
             MouseRadioButton.TabIndex = 8;
@@ -238,7 +240,7 @@
             // ExternalRadioButton
             // 
             ExternalRadioButton.AutoSize = true;
-            ExternalRadioButton.Location = new Point(245, 380);
+            ExternalRadioButton.Location = new Point(234, 384);
             ExternalRadioButton.Name = "ExternalRadioButton";
             ExternalRadioButton.Size = new Size(127, 24);
             ExternalRadioButton.TabIndex = 9;
@@ -246,11 +248,30 @@
             ExternalRadioButton.Text = "External Select";
             ExternalRadioButton.UseVisualStyleBackColor = true;
             // 
+            // PortsComboBox
+            // 
+            PortsComboBox.FormattingEnabled = true;
+            PortsComboBox.Location = new Point(12, 380);
+            PortsComboBox.Name = "PortsComboBox";
+            PortsComboBox.Size = new Size(190, 28);
+            PortsComboBox.TabIndex = 10;
+            // 
+            // ConnectButton
+            // 
+            ConnectButton.Location = new Point(12, 412);
+            ConnectButton.Name = "ConnectButton";
+            ConnectButton.Size = new Size(190, 29);
+            ConnectButton.TabIndex = 11;
+            ConnectButton.Text = "Connect";
+            ConnectButton.UseVisualStyleBackColor = true;
+            // 
             // BetterEtchOSketch
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(ConnectButton);
+            Controls.Add(PortsComboBox);
             Controls.Add(ExternalRadioButton);
             Controls.Add(MouseRadioButton);
             Controls.Add(DisplayMainMenuStrip);
@@ -299,5 +320,7 @@
         private ToolStripMenuItem AboutStripMenuItem;
         private RadioButton MouseRadioButton;
         private RadioButton ExternalRadioButton;
+        private ComboBox PortsComboBox;
+        private Button ConnectButton;
     }
 }
