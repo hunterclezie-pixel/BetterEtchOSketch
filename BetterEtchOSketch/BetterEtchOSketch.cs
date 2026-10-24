@@ -1,4 +1,6 @@
 using System.IO.Ports;
+using System.Media;
+
 namespace BetterEtchOSketch
 {
     public partial class BetterEtchOSketch : Form
@@ -443,12 +445,21 @@ namespace BetterEtchOSketch
             this.penColor = PenColorDialog.Color;
         }
 
-        // Opens the color dialog to select a new background color
-        void UpdateBackgroundColor()
+        // Plays a shaker sound effect when clearing the screen
+        private void PlayShakerSound()
         {
-            PenColorDialog.ShowDialog();
-            this.backColor = PenColorDialog.Color;
-            DisplayPictureBox.BackColor = this.backColor;
+            {
+                try
+                {
+                    string file = Path.Combine(Application.StartupPath, "Resources", "Shaker.wav");
+                    SoundPlayer shaker = new SoundPlayer(file);
+                    shaker.Play();
+                }
+                catch (Exception)
+                {
+                    // Continue clearing if the sound is unavailable
+                }
+            }
         }
 
         // New drawing mode selection
@@ -515,6 +526,7 @@ namespace BetterEtchOSketch
 
         private void ClearButton_Click(object sender, EventArgs e)
         {
+            PlayShakerSound();
             DisplayPictureBox.Refresh();
             DisplayPictureBox.BackColor = Color.White;
             ShakeEtchOSketch();
