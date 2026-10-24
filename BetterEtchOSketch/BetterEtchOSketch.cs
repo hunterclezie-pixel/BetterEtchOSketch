@@ -9,6 +9,7 @@ namespace BetterEtchOSketch
             DisplayPictureBox.MouseMove += DisplayPictureBox_MouseStuff;
             DisplayPictureBox.MouseDown += DisplayPictureBox_MouseStuff;
             MouseRadioButton.Enabled = true;
+            PicStatuslabel.Text = "Mouse Mode";  
 
             // Event handlers for Context Menu items
             ExitStripMenuItem.Click += ExitButton_Click;
@@ -61,6 +62,7 @@ namespace BetterEtchOSketch
         private bool picScanning = false, picWaiting = false;
         private volatile bool picClosing = false;
         private bool picPointReady = false;
+        private bool picErrorShown = false;   // so the popup appears once per problem
         private int adcX = -1, adcY = -1;
         private int nextChannel = 0, requestedChannel = -1;
         private DateTime picRequestTime, nextPICScan = DateTime.MinValue;
@@ -89,7 +91,9 @@ namespace BetterEtchOSketch
                 }
                 if (found == null)
                 {
-                    this.Text = "PIC not found - check USB and firmware";
+                    PicStatuslabel.Text = "PIC: Disconnected - searching...";
+                    ShowPicError("No PIC was found. Check the USB cable, COM port, and firmware.\n" +
+                                 "The program will keep searching in the background.");
                     nextPICScan = DateTime.Now.AddSeconds(2);
                 }
                 else
@@ -99,13 +103,15 @@ namespace BetterEtchOSketch
                     requestedChannel = -1;
                     nextChannel = 0;
                     receivedBytes.Clear();
-                    this.Text = "PIC verified: " + found.PortName;
+                    picErrorShown = false;   // connected, so the next failure gets a new popup
+                    PicStatuslabel.Text = "PIC: Connected (" + found.PortName + ")";
                 }
             }
             catch (Exception ex)
             {
                 found?.Dispose();
-                this.Text = "PIC connection error: " + ex.Message;
+                PicStatuslabel.Text = "PIC connection error: " + ex.Message;
+                ShowPicError("Could not connect to the PIC:\n" + ex.Message);
                 nextPICScan = DateTime.Now.AddSeconds(2);
             }
             finally { picScanning = false; }
@@ -175,7 +181,8 @@ namespace BetterEtchOSketch
             if (reply[1] == 0x45)
             {
                 ClosePIC();
-                this.Text = "PIC reported UART error";
+                PicStatuslabel.Text = "PIC: Disconnected - searching...";
+                ShowPicError("The PIC reported a serial (UART) error. Reconnecting...");
                 nextPICScan = DateTime.Now.AddSeconds(2);
                 return;
             }
@@ -216,6 +223,19 @@ namespace BetterEtchOSketch
             requestedChannel = -1;
             nextChannel = 0;
             receivedBytes.Clear();
+        }
+
+        // Shows a message box once per connection problem
+        void ShowPicError(string message)
+        {
+            if (picErrorShown || picClosing || IsDisposed) return;
+            picErrorShown = true;
+
+            // BeginInvoke posts the box after the current handler finishes, so the
+            // modal box can't re-enter the timer tick while it is open
+            BeginInvoke(new Action(() =>
+                MessageBox.Show(this, message, "PIC Connection Problem",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning)));
         }
 
         // Close the serial port when the application exits
@@ -440,14 +460,15 @@ namespace BetterEtchOSketch
 
             if (ExternalRadioButton.Checked)
             {
-                this.Text = "Etch-O-Sketch - Searching for PIC";
+                picErrorShown = false;
+                PicStatuslabel.Text = "PIC: Searching...";
                 nextPICScan = DateTime.MinValue;
                 SearchForPIC();
             }
             else if (MouseRadioButton.Checked)
             {
                 ClosePIC();
-                this.Text = "Etch-O-Sketch - Mouse";
+                PicStatuslabel.Text = "Mouse Mode";
             }
         }
 
@@ -471,7 +492,8 @@ namespace BetterEtchOSketch
                 {
                     adcFailures++;
                     ClosePIC();
-                    this.Text = "PIC ADC timeout - check AN1 firmware support";
+                    PicStatuslabel.Text = "PIC: Disconnected - searching...";
+                    ShowPicError("The PIC stopped responding (ADC timeout). Check the AN0/AN1 wiring and firmware.");
                     nextPICScan = DateTime.Now.AddSeconds(2);
                     return;
                 }
@@ -480,7 +502,8 @@ namespace BetterEtchOSketch
             catch (Exception)
             {
                 ClosePIC();
-                this.Text = "PIC disconnected - reconnecting";
+                PicStatuslabel.Text = "PIC: Disconnected - searching...";
+                ShowPicError("The PIC was disconnected. Reconnecting...");
                 nextPICScan = DateTime.Now.AddSeconds(2);
             }
         }

@@ -58,6 +58,7 @@
             ExternalRadioButton = new RadioButton();
             PortsComboBox = new ComboBox();
             PICTimer = new System.Windows.Forms.Timer(components);
+            PicStatuslabel = new Label();
             ((System.ComponentModel.ISupportInitialize)DisplayPictureBox).BeginInit();
             DisplayContextMenuStrip.SuspendLayout();
             DisplayMainMenuStrip.SuspendLayout();
@@ -190,7 +191,7 @@
             // ExitMainStripItem
             // 
             ExitMainStripItem.Name = "ExitMainStripItem";
-            ExitMainStripItem.Size = new Size(224, 26);
+            ExitMainStripItem.Size = new Size(116, 26);
             ExitMainStripItem.Text = "Exit";
             // 
             // editToolStripMenuItem
@@ -266,11 +267,21 @@
             // 
             PICTimer.Interval = 50;
             // 
+            // PicStatuslabel
+            // 
+            PicStatuslabel.AutoSize = true;
+            PicStatuslabel.Location = new Point(12, 416);
+            PicStatuslabel.Name = "PicStatuslabel";
+            PicStatuslabel.Size = new Size(74, 20);
+            PicStatuslabel.TabIndex = 11;
+            PicStatuslabel.Text = "PIC Status";
+            // 
             // BetterEtchOSketch
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(PicStatuslabel);
             Controls.Add(PortsComboBox);
             Controls.Add(ExternalRadioButton);
             Controls.Add(MouseRadioButton);
@@ -327,5 +338,6 @@
         private RadioButton ExternalRadioButton;
         private ComboBox PortsComboBox;
         private System.Windows.Forms.Timer PICTimer;
+        private Label PicStatuslabel;
     }
 }
