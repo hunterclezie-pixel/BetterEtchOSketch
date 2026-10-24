@@ -31,15 +31,17 @@ namespace BetterEtchOSketch
         private int penSize = 1;
 
         // Serial and potentiometer variables below Here --------------------------------------------------------------
-        SerialPort _serialPort = new SerialPort();
-        System.Windows.Forms.Timer AnalogTimer = new System.Windows.Forms.Timer();
-        ToolTip tips = new ToolTip();
-
-        int adcX = -1, adcY = -1;
-        bool picPointReady = false;
-        bool analogBusy = false;
-        int nextChannel = 0;
-        int analogFailures = 0;
+        private ToolTip tips = new ToolTip();
+        private SerialPort? picPort;
+        private System.Windows.Forms.Timer picTimer = new System.Windows.Forms.Timer();
+        private List<byte> receivedBytes = new List<byte>();
+        private bool picScanning = false, picWaiting = false;
+        private volatile bool picClosing = false;
+        private bool picPointReady = false;
+        private int adcX = -1, adcY = -1;
+        private int nextChannel = 0, requestedChannel = -1;
+        private DateTime picRequestTime, nextPICScan = DateTime.MinValue;
+        private int adcFailures = 0;
 
         static readonly byte[] IdRequest = { 0x24, 0x49, 0x00 };
         static readonly byte[] IdReply = { 0x24, 0x49, 0x02, 0x33, 0x75 };
@@ -131,6 +133,42 @@ namespace BetterEtchOSketch
             return null;
         }
 
+        // Packet format: 24 command payloadLength payload...
+        void ReceiveByte(byte value)
+        {
+            if (receivedBytes.Count == 0 && value != 0x24) return;
+            receivedBytes.Add(value);
+            if (receivedBytes.Count == 3 && receivedBytes[2] > 8)
+            {
+                receivedBytes.Clear();
+                return;
+            }
+            if (receivedBytes.Count < 3 || receivedBytes.Count < receivedBytes[2] + 3) return;
+
+            byte[] reply = receivedBytes.ToArray();
+            receivedBytes.Clear();
+
+            if (reply[1] == 0x45)
+            {
+                ClosePIC();
+                this.Text = "PIC reported UART error";
+                nextPICScan = DateTime.Now.AddSeconds(2);
+                return;
+            }
+            if (!picWaiting || reply[1] != 0x41 || reply[2] != 3 ||
+                reply[3] != requestedChannel) return;
+
+            int adc = reply[4] * 256 + reply[5];
+            if (adc > 1023) return;
+
+            if (requestedChannel == 0) adcX = adc;
+            else adcY = adc;
+            picWaiting = false;
+            adcFailures = 0;
+            nextChannel = 1 - requestedChannel;
+            if (requestedChannel == 1) DrawFromPIC();
+        }
+
         void RequestADC()
         {
             if (picPort == null || !picPort.IsOpen || picWaiting) return;
@@ -139,6 +177,15 @@ namespace BetterEtchOSketch
             picPort.Write(request, 0, request.Length);
             picWaiting = true;
             picRequestTime = DateTime.Now;
+        }
+
+        void ClosePIC()
+        {
+            try { picPort?.Close(); picPort?.Dispose(); } catch (Exception) { }
+            picPort = null;
+            picWaiting = false;
+            picPointReady = false;
+            receivedBytes.Clear();
         }
 
         //Custom Methids below here --------------------------------------------------------------
@@ -328,7 +375,59 @@ namespace BetterEtchOSketch
             DisplayPictureBox.BackColor = this.backColor;
         }
 
+        // New drawing mode selection
+        private void DrawingModeChanged(object? sender, EventArgs e)
+        {
+            picPointReady = false;
+            adcX = -1;
+            adcY = -1;
+
+            if (ExternalRadioButton.Checked)
+            {
+                this.Text = "Etch-O-Sketch - Searching for PIC";
+                nextPICScan = DateTime.MinValue;
+                SearchForPIC();
+            }
+            else if (MouseRadioButton.Checked)
+            {
+                ClosePIC();
+                this.Text = "Etch-O-Sketch - Mouse";
+            }
+        }
+
         //Event Handlers below here --------------------------------------------------------------
+
+        // Timer receives partial packets and alternates AN0 and AN1 requests
+        private void PicTimer_Tick(object? sender, EventArgs e)
+        {
+            if (!ExternalRadioButton.Checked || picClosing) return;
+            if (picPort == null || !picPort.IsOpen)
+            {
+                if (!picScanning && DateTime.Now >= nextPICScan) SearchForPIC();
+                return;
+            }
+            try
+            {
+                while (picPort.BytesToRead > 0)
+                    ReceiveByte((byte)picPort.ReadByte());
+
+                if (picWaiting && (DateTime.Now - picRequestTime).TotalMilliseconds > 500)
+                {
+                    adcFailures++;
+                    ClosePIC();
+                    this.Text = "PIC ADC timeout - check AN1 firmware support";
+                    nextPICScan = DateTime.Now.AddSeconds(2);
+                    return;
+                }
+                if (!picWaiting) RequestADC();
+            }
+            catch (Exception)
+            {
+                ClosePIC();
+                this.Text = "PIC disconnected - reconnecting";
+                nextPICScan = DateTime.Now.AddSeconds(2);
+            }
+        }
 
         private void ExitButton_Click(object sender, EventArgs e)
         {
@@ -361,38 +460,6 @@ namespace BetterEtchOSketch
             MessageBox.Show("This is an EtchOSketch application, with basic drawing functionalities. \n" +
                 "You can draw lines, select colors, and clear the screen. \n" +
                 "This also allows a Sine, Cosine, and Tangent waves are drawn in different colors.");
-        }
-
-        // Timer receives partial packets and alternates AN0 and AN1 requests
-        private void PicTimer_Tick(object? sender, EventArgs e)
-        {
-            if (!ExternalRadioButton.Checked || picClosing) return;
-            if (picPort == null || !picPort.IsOpen)
-            {
-                if (!picScanning && DateTime.Now >= nextPICScan) SearchForPIC();
-                return;
-            }
-            try
-            {
-                while (picPort.BytesToRead > 0)
-                    ReceiveByte((byte)picPort.ReadByte());
-
-                if (picWaiting && (DateTime.Now - picRequestTime).TotalMilliseconds > 500)
-                {
-                    adcFailures++;
-                    ClosePIC();
-                    this.Text = "PIC ADC timeout - check AN1 firmware support";
-                    nextPICScan = DateTime.Now.AddSeconds(2);
-                    return;
-                }
-                if (!picWaiting) RequestADC();
-            }
-            catch (Exception)
-            {
-                ClosePIC();
-                this.Text = "PIC disconnected - reconnecting";
-                nextPICScan = DateTime.Now.AddSeconds(2);
-            }
         }
     }
 }

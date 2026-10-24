@@ -79,6 +79,7 @@
             ExitButton.TabIndex = 1;
             ExitButton.Text = "Exit";
             ExitButton.UseVisualStyleBackColor = true;
+            ExitButton.Click += ExitButton_Click;
             // 
             // SelectColorButton
             // 
@@ -88,6 +89,7 @@
             SelectColorButton.TabIndex = 2;
             SelectColorButton.Text = "Select Color";
             SelectColorButton.UseVisualStyleBackColor = true;
+            SelectColorButton.Click += SelectColorButton_Click;
             // 
             // DrawWaveformButton
             // 
@@ -97,6 +99,7 @@
             DrawWaveformButton.TabIndex = 3;
             DrawWaveformButton.Text = "Draw Waveform";
             DrawWaveformButton.UseVisualStyleBackColor = true;
+            DrawWaveformButton.Click += DrawWavefomButton_Click;
             // 
             // ClearButton
             // 
@@ -106,6 +109,7 @@
             ClearButton.TabIndex = 4;
             ClearButton.Text = "Clear";
             ClearButton.UseVisualStyleBackColor = true;
+            ClearButton.Click += ClearButton_Click;
             // 
             // DisplayContextMenuStrip
             // 
@@ -223,8 +227,9 @@
             // AboutMainStripItem
             // 
             AboutMainStripItem.Name = "AboutMainStripItem";
-            AboutMainStripItem.Size = new Size(133, 26);
+            AboutMainStripItem.Size = new Size(224, 26);
             AboutMainStripItem.Text = "About";
+            AboutMainStripItem.Click += AboutMainStripItem_Click;
             // 
             // MouseRadioButton
             // 
@@ -259,7 +264,6 @@
             // PICTimer
             // 
             PICTimer.Interval = 50;
-            PICTimer.Tick += PICTimer_Tick;
             // 
             // BetterEtchOSketch
             // 
@@ -284,6 +288,11 @@
             DisplayMainMenuStrip.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
+        }
+
+        private void AboutMainStripItem_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
