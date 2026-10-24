@@ -41,6 +41,9 @@ namespace BetterEtchOSketch
             picTimer.Interval = 50;
             picTimer.Tick += PicTimer_Tick;
             picTimer.Start();
+
+            // Close the PIC connection when the form closes
+            this.FormClosing += BetterEtchOSketch_FormClosing;
         }
 
         //Global Variables below here --------------------------------------------------------------
@@ -208,7 +211,19 @@ namespace BetterEtchOSketch
             picPort = null;
             picWaiting = false;
             picPointReady = false;
+            adcX = -1;
+            adcY = -1;
+            requestedChannel = -1;
+            nextChannel = 0;
             receivedBytes.Clear();
+        }
+
+        // Close the serial port when the application exits
+        private void BetterEtchOSketch_FormClosing(object? sender, FormClosingEventArgs e)
+        {
+            picClosing = true;
+            picTimer.Stop();
+            ClosePIC();
         }
 
         //Custom Methids below here --------------------------------------------------------------
@@ -370,17 +385,19 @@ namespace BetterEtchOSketch
         // Handles mouse movement and clicks on the picture box for drawing and showing the context menu
         private void DisplayPictureBox_MouseStuff(object? sender, MouseEventArgs e)
         {
-            if (!MouseRadioButton.Checked)
-                return;
-
-            if (e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Right)
             {
-                DrawLineSegment(e.X, e.Y);
+                DisplayContextMenuStrip.Show(DisplayPictureBox, e.Location);
             }
-
-            oldX = e.X;
-            oldY = e.Y;
-            this.Text = $"{e.X},{e.Y}";
+            else if (e.Button == MouseButtons.Middle)
+            {
+                UpdatePenColor();
+            }
+            else if (e.Button == MouseButtons.Left && MouseRadioButton.Checked)
+            {
+                oldX = e.X;
+                oldY = e.Y;
+            }
         }
 
         // Opens the color dialog to select a new pen color
