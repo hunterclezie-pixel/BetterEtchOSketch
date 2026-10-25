@@ -9,7 +9,7 @@ namespace BetterEtchOSketch
         {
             InitializeComponent();
             DisplayPictureBox.MouseMove += DisplayPictureBox_MouseStuff;
-            DisplayPictureBox.MouseDown += DisplayPictureBox_MouseStuff;
+            DisplayPictureBox.MouseDown += DisplayPictureBox_MouseDown;
             MouseRadioButton.Enabled = true;
             PicStatuslabel.Text = "Mouse Mode";  
 
@@ -105,7 +105,6 @@ namespace BetterEtchOSketch
                     requestedChannel = -1;
                     nextChannel = 0;
                     receivedBytes.Clear();
-                    picErrorShown = false;   // connected, so the next failure gets a new popup
                     PicStatuslabel.Text = "PIC: Connected (" + found.PortName + ")";
                 }
             }
@@ -199,7 +198,11 @@ namespace BetterEtchOSketch
             picWaiting = false;
             adcFailures = 0;
             nextChannel = 1 - requestedChannel;
-            if (requestedChannel == 1) DrawFromPIC();
+            if (requestedChannel == 1)
+            {
+                picErrorShown = false;
+                DrawFromPIC();
+            }
         }
 
         // Request the next ADC value from the PIC, alternating between AN0 and AN1 channels
@@ -448,17 +451,15 @@ namespace BetterEtchOSketch
         // Plays a shaker sound effect when clearing the screen
         private void PlayShakerSound()
         {
+            try
             {
-                try
-                {
-                    string file = Path.Combine(Application.StartupPath, "Resources", "Shaker.wav");
-                    SoundPlayer shaker = new SoundPlayer(file);
-                    shaker.Play();
-                }
-                catch (Exception)
-                {
-                    // Continue clearing if the sound is unavailable
-                }
+                string file = Path.Combine(Application.StartupPath, "Resources", "Shaker.wav");
+                SoundPlayer shaker = new SoundPlayer(file);
+                shaker.Play();
+            }
+            catch (Exception)
+            {
+                // Continue clearing if the sound is unavailable
             }
         }
 
@@ -496,19 +497,29 @@ namespace BetterEtchOSketch
             }
             try
             {
-                while (picPort.BytesToRead > 0)
+                while (picPort != null && picPort.IsOpen && picPort.BytesToRead > 0)
+                {
                     ReceiveByte((byte)picPort.ReadByte());
+                }
 
+                if (picPort == null) return;
+
+                // If the PIC is waiting for a reply and it has been more than 500 ms, consider it a failure
                 if (picWaiting && (DateTime.Now - picRequestTime).TotalMilliseconds > 500)
                 {
                     adcFailures++;
                     ClosePIC();
                     PicStatuslabel.Text = "PIC: Disconnected - searching...";
-                    ShowPicError("The PIC stopped responding (ADC timeout). Check the AN0/AN1 wiring and firmware.");
+                    ShowPicError("The PIC stopped responding (ADC timeout). " +
+                        "Check the AN0/AN1 wiring and firmware.");
                     nextPICScan = DateTime.Now.AddSeconds(2);
                     return;
                 }
-                if (!picWaiting) RequestADC();
+
+                if (!picWaiting)
+                {
+                    RequestADC();
+                }
             }
             catch (Exception)
             {
@@ -530,6 +541,7 @@ namespace BetterEtchOSketch
             DisplayPictureBox.Refresh();
             DisplayPictureBox.BackColor = Color.White;
             ShakeEtchOSketch();
+            picPointReady = false;
         }
 
         private void DrawWavefomButton_Click(object sender, EventArgs e)
@@ -539,6 +551,7 @@ namespace BetterEtchOSketch
             DrawCosineWave();
             DrawTangentWave();
             DrawGrid();
+            picPointReady = false;
         }
 
         private void SelectColorButton_Click(object sender, EventArgs e)
