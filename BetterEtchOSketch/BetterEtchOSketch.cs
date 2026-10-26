@@ -453,7 +453,7 @@ namespace BetterEtchOSketch
         {
             try
             {
-                string file = Path.Combine(Application.StartupPath, "Resources", "Shaker.wav");
+                string file = Path.Combine(Application.StartupPath, "Resources", "resources_shaker.wav");
                 SoundPlayer shaker = new SoundPlayer(file);
                 shaker.Play();
             }
