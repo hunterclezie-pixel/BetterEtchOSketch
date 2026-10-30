@@ -1,6 +1,14 @@
 using System.IO.Ports;
 using System.Media;
 
+/* 
+Hunter Clezie 
+Fall 2026
+RCET 3371
+BetterEtchOSketch
+github url: https://github.com/hunterclezie-pixel/BetterEtchOSketch.git
+*/
+
 namespace BetterEtchOSketch
 {
     public partial class BetterEtchOSketch : Form
